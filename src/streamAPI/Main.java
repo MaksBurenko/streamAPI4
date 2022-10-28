@@ -1,7 +1,7 @@
 package streamAPI;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.function.Consumer;
 
 public class Main {
 
@@ -39,7 +39,7 @@ public class Main {
         );
 
 // Создание почтового сервиса.
-        MailService<String> mailService = new MailService<>();
+        MailService<String> mailService = new MailService<>() {};
 
 // Обработка списка писем почтовым сервисом
         messages.stream().forEachOrdered(mailService);
@@ -70,7 +70,7 @@ public class Main {
         Salary salary3 = new Salary(randomFrom, randomTo, randomSalary);
 
 // Создание почтового сервиса, обрабатывающего зарплаты.
-        MailService<Integer> salaryService = new MailService<>();
+        MailService<Integer> salaryService = new MailService<>() {};
 
 // Обработка списка зарплат почтовым сервисом
         Arrays.asList(salary1, salary2, salary3).forEach(salaryService);
@@ -83,34 +83,55 @@ public class Main {
         assert salaries.get(randomTo).equals(Arrays.asList(randomSalary)): "wrong salaries mailbox content (3)";
     }
 
-    public static class MailMessage {
-        String s1;
-        String s2;
-        String s3;
+    /////////////////////////
 
-        MailMessage (String s1,String s2,String s3) {
-            this.s1 = s1;
-            this.s2 = s2;
-            this.s3 = s3;
+    public static class MailMessage {
+        String from;
+        String to;
+        String content;
+
+        MailMessage (String from,String to,String content) {
+            this.from = from;
+            this.to = to;
+            this.content = content;
         }
 
         public String getFrom() {
-            return s1;
+            return from;
         }
         public String getTo() {
-            return s2;
+            return to;
         }
         public String getContent() {
-            return s3;
+            return content;
         }
-    }
-
-    public static class Salary {
 
     }
 
-    public static class MailService <T> {
+    ///////////////////////
+
+    public static class Salary  {
+        String company;
+        String general;
+        int salary;
+        String to;
+
+        public Salary(String company, String general, int salary) {
+            this.company = company;
+            this.general = general;
+            this.salary = salary;
+        }
+
+        public String getTo() {
+            return to;
+        }
 
     }
 
+    //////////////////////////
+
+    public abstract static class MailService <T> implements Consumer<MailMessage> {
+
+        public abstract Map<String, List<T>> getMailBox();
+    }
 }
