@@ -39,7 +39,7 @@ public class Main {
         );
 
 // Создание почтового сервиса.
-        MailService<String> mailService = new MailService<>() {};
+        MailService<String> mailService = new MailService<>();
 
 // Обработка списка писем почтовым сервисом
         messages.stream().forEachOrdered(mailService);
@@ -70,7 +70,7 @@ public class Main {
         Salary salary3 = new Salary(randomFrom, randomTo, randomSalary);
 
 // Создание почтового сервиса, обрабатывающего зарплаты.
-        MailService<Integer> salaryService = new MailService<>() {};
+        MailService<Integer> salaryService = new MailService<>();
 
 // Обработка списка зарплат почтовым сервисом
         Arrays.asList(salary1, salary2, salary3).forEach(salaryService);
@@ -130,8 +130,32 @@ public class Main {
 
     //////////////////////////
 
-    public abstract static class MailService <T> implements Consumer<MailMessage> {
+    public static class MailService <T> implements listInt, listString {
 
-        public abstract Map<String, List<T>> getMailBox();
+        @Override
+        public Map<String, List<T>> getMailBox() {
+            return null;
+        }
+
+        @Override
+        public void accept(MailMessage mailMessage) {
+        }
+
+        @Override
+        public void accept(Salary salary) {
+        }
+
+    }
+
+    public interface listString<String> extends Consumer<MailMessage>{
+        public Map<String, List<String>> getMailBox();
+        @Override
+        public void accept(MailMessage mailMessage);
+
+    }
+    public interface listInt<Integer> extends Consumer<Salary>{
+        public Map<String, List<Integer>> getMailBox();
+        @Override
+        public void accept(Salary salary);
     }
 }
